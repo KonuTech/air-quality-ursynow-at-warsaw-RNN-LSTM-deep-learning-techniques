@@ -22,7 +22,7 @@ from sklearn.feature_selection import VarianceThreshold, SelectKBest, f_regressi
 from sklearn.tree import ExtraTreeRegressor, DecisionTreeClassifier
 from sklearn.pipeline import Pipeline
 from sklearn.compose import ColumnTransformer
-from sklearn.metrics import confusion_matrix, classification_report, accuracy_score, precision_score, recall_score, roc_curve, precision_recall_curve, f1_score, roc_auc_score
+from sklearn.metrics import confusion_matrix, classification_report, accuracy_score, precision_score, recall_score, roc_curve, precision_recall_curve, f1_score, roc_auc_score, mean_squared_error
 from sklearn.naive_bayes import MultinomialNB
 from sklearn.cluster import KMeans, DBSCAN
 from sklearn.decomposition import PCA
@@ -59,6 +59,7 @@ from IPython.display import Image
 import itertools
 from numpy.polynomial.polynomial import polyfit
 from random import randint
+from math import sqrt
 
 warnings.filterwarnings('ignore')
 sns.set()
@@ -468,7 +469,7 @@ def fit_SimpleRNN(train_X, train_y, cell_units, epochs):
     # define the loss function / optimization strategy, and fit
     # the model with the desired number of passes over the data (epochs) 
     model.compile(loss='mean_squared_error', optimizer='adam')
-    model.fit(train_X, train_y, epochs=epochs, verbose=1)
+    model.fit(train_X, train_y, epochs=epochs, shuffle=False, verbose=0)
     
     return model
 
@@ -522,3 +523,33 @@ def predict_and_plot(X_init, y, model, title):
     plt.title(title)
     plt.legend(['Initial Series','Target Series','Predictions'])
     
+def fit_LSTM(train_X, train_y, cell_units, epochs):
+    """
+    Fit LSTM to data train_X, train_y 
+    
+    arguments
+    ---------
+    train_X (array): input sequence samples for training 
+    train_y (list): next step in sequence targets
+    cell_units (int): number of hidden units for LSTM cells  
+    epochs (int): number of training epochs   
+    """
+    
+    # initialize model
+    model = Sequential() 
+    
+    # construct a LSTM layer with specified number of hidden units
+    # per cell and desired sequence input format 
+    model.add(LSTM(cell_units, input_shape=(train_X.shape[1],1))) #,return_sequences= True))
+    #model.add(LSTM(cell_units_l2, input_shape=(train_X.shape[1],1)))
+    
+    # add an output layer to make final predictions 
+    model.add(Dense(1))
+    
+    # define the loss function / optimization strategy, and fit
+    # the model with the desired number of passes over the data (epochs) 
+    model.compile(loss='mean_squared_error', optimizer='adam')
+    model.fit(train_X, train_y, epochs=epochs, shuffle=False, verbose=0)
+    
+    return model
+
