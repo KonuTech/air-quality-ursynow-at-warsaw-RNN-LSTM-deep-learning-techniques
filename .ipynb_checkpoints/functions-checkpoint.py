@@ -469,7 +469,7 @@ def fit_SimpleRNN(train_X, train_y, cell_units, epochs):
     # define the loss function / optimization strategy, and fit
     # the model with the desired number of passes over the data (epochs) 
     model.compile(loss='mean_squared_error', optimizer='adam')
-    model.fit(train_X, train_y, epochs=epochs, shuffle=False, verbose=0)
+    model.fit(train_X, train_y, epochs=epochs, shuffle=False, verbose=1)
     
     return model
 
@@ -549,7 +549,7 @@ def fit_LSTM(train_X, train_y, cell_units, epochs):
     # define the loss function / optimization strategy, and fit
     # the model with the desired number of passes over the data (epochs) 
     model.compile(loss='mean_squared_error', optimizer='adam')
-    model.fit(train_X, train_y, epochs=epochs, shuffle=False, verbose=0)
+    model.fit(train_X, train_y, epochs=epochs, shuffle=False, verbose=1)
     
     return model
 
